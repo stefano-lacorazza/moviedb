@@ -9,7 +9,12 @@ import { SearchBar } from './components/search-bar';
 import { SimplifiedMovie } from './models/types';
 import { randomMovieBanner, orderedButtons, appendMoviesToContainer } from './utils/helpers';
 
+
+
+let count:number = 1;
+const moviesContainer = new MoviesContainer();
 async function renderApp() {
+    
     
     const popularMovies: SimplifiedMovie[] = await fetchPopularMovies();
     // Create a new instance of the Header class and append it to the body of the document
@@ -36,15 +41,21 @@ async function renderApp() {
     document.body.appendChild(searchBar.render());
 
     // Create a new instance of the MoviesContainer class and append it to the body of the document
-    const moviesContainer = new MoviesContainer();
+    
     appendMoviesToContainer(popularMovies, moviesContainer);
     document.body.appendChild(  moviesContainer.render());
 
      // Create a new instance of the Button class for a button to Load More Movies
-    const loadMoreMoviesButton = new Button('Load More', () => {});
+    const loadMoreMoviesButton = new Button('Load More', loadMoreMovies);
     const buttonsContainer2= orderedButtons([loadMoreMoviesButton]);
     document.body.appendChild(buttonsContainer2);
 }
 
+async function loadMoreMovies() : Promise<void>{
+    count +=1;
+    const movies: SimplifiedMovie[] = await fetchPopularMovies(count+1);
+    appendMoviesToContainer(movies, moviesContainer);
+
+}
 
 renderApp();

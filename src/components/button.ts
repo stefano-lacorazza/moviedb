@@ -7,7 +7,7 @@ class Button {
 
   public buttonElement: HTMLButtonElement; // To access the button outside the class
 
-  constructor(text: string, onClick: () => void, styleClass: string = 'btn-primary') {
+  constructor(text: string, onClick: () => Promise<void>, styleClass: string = 'btn-primary') {
     this.text = text;
     this.onClick = onClick;
     this.styleClass = styleClass;

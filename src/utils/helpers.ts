@@ -4,6 +4,7 @@ import { Button } from '../components/button';
 import { MoviesContainer } from '../components/movie-container';
 import { MoviePreview } from '../components/movie-preview';
 
+
 function simplifyPopularMovies(data: PopularMovieResponse): SimplifiedMovie[] {
     const imgurl:string = 'https://image.tmdb.org/t/p/w500';
     return data.results.map((movie: Movie) => ({
@@ -44,4 +45,4 @@ function appendMoviesToContainer(movies: SimplifiedMovie[], moviesContainer:Movi
 }
 
 
-export { simplifyPopularMovies, randomMovieBanner, orderedButtons, appendMoviesToContainer };
+export { simplifyPopularMovies, randomMovieBanner, orderedButtons, appendMoviesToContainer};
