@@ -9,3 +9,4 @@ export function simplifyPopularMovies(data: PopularMovieResponse): SimplifiedMov
         poster_path: imgurl+movie.poster_path
     }));
 }
+

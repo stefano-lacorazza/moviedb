@@ -11,7 +11,7 @@ import { SearchBar } from './components/search-bar';
 import { SimplifiedMovie } from './models/types';
 
 async function renderApp() {
-     const popularMovies: SimplifiedMovie[] = await fetchPopularMovies();
+    const popularMovies: SimplifiedMovie[] = await fetchPopularMovies();
     // Create a new instance of the Header class and append it to the body of the document
     const header = new Header('Movie App');
     document.body.appendChild(header.render());
@@ -21,8 +21,6 @@ async function renderApp() {
 
     const randomIndex = Math.floor(Math.random() * popularMovies.length);
     const randomMovie = popularMovies[randomIndex];
-
-
 
     const banner = new Banner(
         randomMovie.title,
@@ -43,8 +41,6 @@ async function renderApp() {
     const topRatedMoviesButton = new Button('Top Rated', () => {});
 
     // Append the three buttons to the body of the document side by side
-
-
     const buttonsContainer = document.createElement('div');
     buttonsContainer.style.display = 'flex';
     buttonsContainer.style.justifyContent = 'center';
