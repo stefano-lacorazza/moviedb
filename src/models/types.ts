@@ -1,4 +1,4 @@
-interface ApiResponse {
+interface PopularMovieResponse {
     results: Movie[];
     page: number;
     total_results: number;
@@ -22,4 +22,11 @@ interface Movie {
   vote_count: number;
 }
 
-export type { ApiResponse, Movie };
+interface SimplifiedMovie {
+    title: string;
+    overview: string;
+    release_date: string;
+    poster_path: string;
+}
+
+export type { PopularMovieResponse, Movie, SimplifiedMovie}

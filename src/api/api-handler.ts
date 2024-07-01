@@ -1,6 +1,8 @@
-import { ApiResponse } from "../models/types";
+import { PopularMovieResponse, SimplifiedMovie } from "../models/types";
+import { simplifyPopularMovies } from "../utils/helpers";
 
-async function fetchApiDataWithHeaders(url: string): Promise<ApiResponse> {
+async function fetchPopularMovies(page:number = 1): Promise<SimplifiedMovie[]> {
+    const url: string = `https://api.themoviedb.org/3/movie/popular?language=en-US&page=${page}`;
     try {
       const response = await fetch(url, {
         method: 'GET', // Method is GET
@@ -13,9 +15,9 @@ async function fetchApiDataWithHeaders(url: string): Promise<ApiResponse> {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const data: ApiResponse = await response.json();
-
-      return data;
+      const data: PopularMovieResponse = await response.json();
+      const simplifiedMovies: SimplifiedMovie[] = simplifyPopularMovies(data);
+      return simplifiedMovies;
     } catch (error) {
 
         throw new Error(`Failed to fetch API data: ${error}`);
@@ -34,4 +36,4 @@ fetchApiDataWithHeaders(url, accessToken)
 
   */
 
-  export { fetchApiDataWithHeaders };
+  export { fetchPopularMovies };
