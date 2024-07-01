@@ -1,7 +1,12 @@
+
 class MoviePreview {
+
     title: string;
+
     img: string;
+
     description: string;
+
     releaseDate: string;
 
     constructor(title: string, img: string, description: string, releaseDate: string) {
@@ -10,12 +15,11 @@ class MoviePreview {
         this.description = description;
         this.releaseDate = releaseDate;
     }
-
-displayInfo(): string {
-    return `
-
-
-<div class="col-lg-3 col-md-4 col-12 p-2">
+    
+    render(): HTMLDivElement {
+        const div = document.createElement('div');
+        div.className = "col-lg-3 col-md-4 col-12 p-2";
+        div.innerHTML = `
                             <div class="card shadow-sm">
                                 <img
                                     src=${this.img}
@@ -49,11 +53,13 @@ displayInfo(): string {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
     `;
+    return div;
 }
 }
+
+export { MoviePreview };
+
 /*
 // Example usage:
 const myFavoriteMovie = new MoviePreview("Inception", "Christopher Nolan", 2010);
@@ -62,3 +68,4 @@ myFavoriteMovie.displayInfo();
 // Assuming you have an element with the ID 'movie-info' in your HTML
 document.getElementById('movie-info').innerHTML = myFavoriteMovie.displayInfo();
 */
+
