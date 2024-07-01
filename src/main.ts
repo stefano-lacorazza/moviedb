@@ -9,6 +9,7 @@ import { Button } from './components/button';
 import { MoviesContainer } from './components/movie-container';
 import { SearchBar } from './components/search-bar';
 import { SimplifiedMovie } from './models/types';
+import { randomMovieBanner } from './utils/helpers';
 
 async function renderApp() {
     const popularMovies: SimplifiedMovie[] = await fetchPopularMovies();
@@ -18,15 +19,7 @@ async function renderApp() {
 
 
     // Create a new instance of the Banner class and append it to the body of the document
-
-    const randomIndex = Math.floor(Math.random() * popularMovies.length);
-    const randomMovie = popularMovies[randomIndex];
-
-    const banner = new Banner(
-        randomMovie.title,
-        randomMovie.overview,
-        randomMovie.poster_path
-    );
+    const banner = randomMovieBanner(popularMovies);
     document.body.appendChild(banner.render());
 
 
