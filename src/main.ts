@@ -11,18 +11,26 @@ import { SearchBar } from './components/search-bar';
 import { SimplifiedMovie } from './models/types';
 
 async function renderApp() {
- 
+     const popularMovies: SimplifiedMovie[] = await fetchPopularMovies();
     // Create a new instance of the Header class and append it to the body of the document
     const header = new Header('Movie App');
     document.body.appendChild(header.render());
 
+
     // Create a new instance of the Banner class and append it to the body of the document
+
+    const randomIndex = Math.floor(Math.random() * popularMovies.length);
+    const randomMovie = popularMovies[randomIndex];
+
+
+
     const banner = new Banner(
-        'Inception',
-        'A thief who enters the dreams of others to steal their secrets.',
-        'https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg'
+        randomMovie.title,
+        randomMovie.overview,
+        randomMovie.poster_path
     );
     document.body.appendChild(banner.render());
+
 
     // Create a new instance of the Button class for a button to display the popular movies
     const popularMoviesButton = new Button('Popular', () => {
@@ -55,7 +63,7 @@ async function renderApp() {
     // Create a new instance of the MoviesContainer class and append it to the body of the document
     const moviesContainer = new MoviesContainer();
 
-    const popularMovies: SimplifiedMovie[] = await fetchPopularMovies();
+   
     popularMovies.forEach(movie => {
         const moviePreview = new MoviePreview(
             movie.title,
@@ -66,7 +74,7 @@ async function renderApp() {
         moviesContainer.appendMovie(moviePreview.render());
     });
 
-
+    
     document.body.appendChild(  moviesContainer.render());
      // Create a new instance of the Button class for a button to Load More Movies
     const loadMoreMoviesButton = new Button('Load More', () => {});
@@ -82,6 +90,7 @@ async function renderApp() {
     buttonsContainer2.appendChild(loadMoreMoviesButton.buttonElement);
     document.body.appendChild(buttonsContainer2);
 }
+
 
 // Call the function to render the app
 renderApp();
