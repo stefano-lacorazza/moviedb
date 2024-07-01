@@ -1,6 +1,6 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import { fetchPopularMovies } from './api/api-handler';
 import './styles/styles.css';
 import { MoviePreview } from './components/movie-preview';
 import { Header } from './components/header';
@@ -8,20 +8,29 @@ import { Banner } from './components/banner';
 import { Button } from './components/button';
 import { MoviesContainer } from './components/movie-container';
 import { SearchBar } from './components/search-bar';
+import { SimplifiedMovie } from './models/types';
 
-function renderApp() {
- 
+async function renderApp() {
+     const popularMovies: SimplifiedMovie[] = await fetchPopularMovies();
     // Create a new instance of the Header class and append it to the body of the document
     const header = new Header('Movie App');
     document.body.appendChild(header.render());
 
+
     // Create a new instance of the Banner class and append it to the body of the document
+
+    const randomIndex = Math.floor(Math.random() * popularMovies.length);
+    const randomMovie = popularMovies[randomIndex];
+
+
+
     const banner = new Banner(
-        'Inception',
-        'A thief who enters the dreams of others to steal their secrets.',
-        'https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg'
+        randomMovie.title,
+        randomMovie.overview,
+        randomMovie.poster_path
     );
     document.body.appendChild(banner.render());
+
 
     // Create a new instance of the Button class for a button to display the popular movies
     const popularMoviesButton = new Button('Popular', () => {
@@ -54,23 +63,18 @@ function renderApp() {
     // Create a new instance of the MoviesContainer class and append it to the body of the document
     const moviesContainer = new MoviesContainer();
 
-    // Create a new instance of the MoviePreview class and append it to the body of the document
-    const inceptionMovie = new MoviePreview(
-        'Inception',
-        'https://image.tmdb.org/t/p/w500/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg',
-        'A thief who enters the dreams of others to steal their secrets.',
-        '2010-07-16'
-    );
+   
+    popularMovies.forEach(movie => {
+        const moviePreview = new MoviePreview(
+            movie.title,
+            movie.poster_path,
+            movie.overview,
+            movie.release_date
+        );
+        moviesContainer.appendMovie(moviePreview.render());
+    });
 
-    moviesContainer.appendMovie(inceptionMovie.render());
-    moviesContainer.appendMovie(inceptionMovie.render());
-    moviesContainer.appendMovie(inceptionMovie.render());
-    moviesContainer.appendMovie(inceptionMovie.render());
-    moviesContainer.appendMovie(inceptionMovie.render());
-    moviesContainer.appendMovie(inceptionMovie.render());
-    moviesContainer.appendMovie(inceptionMovie.render());
-    moviesContainer.appendMovie(inceptionMovie.render());
-
+    
     document.body.appendChild(  moviesContainer.render());
      // Create a new instance of the Button class for a button to Load More Movies
     const loadMoreMoviesButton = new Button('Load More', () => {});
@@ -86,6 +90,7 @@ function renderApp() {
     buttonsContainer2.appendChild(loadMoreMoviesButton.buttonElement);
     document.body.appendChild(buttonsContainer2);
 }
+
 
 // Call the function to render the app
 renderApp();
