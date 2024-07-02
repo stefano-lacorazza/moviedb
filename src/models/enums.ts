@@ -6,6 +6,9 @@ enum MovieType {
     SEARCH = 'search'
 }
 
+enum FillHeart {
+    FILLED = 'red',
+    UNFILLED = "transparent",
+}
 
-
-export { MovieType };
+export { MovieType, FillHeart };

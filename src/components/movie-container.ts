@@ -5,6 +5,7 @@ class MoviesContainer {
     this.filmContainerDiv = document.createElement('div');
     this.filmContainerDiv.className = 'row';
     this.filmContainerDiv.id = 'film-container';
+    this.filmContainerDiv.style.pointerEvents = 'none';
   }
 
   render() : HTMLElement{

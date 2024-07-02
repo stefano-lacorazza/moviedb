@@ -1,13 +1,13 @@
 import { PopularMovieResponse, UpcomingMovieResponse, Movie, SimplifiedMovie } from '../models/types';
 import { Banner } from '../components/banner';
 import { Button } from '../components/button';
-import { MoviesContainer } from '../components/movie-container';
-import { MoviePreview } from '../components/movie-preview';
+
 
 
 function simplifyPopularMovies(data: PopularMovieResponse): SimplifiedMovie[] {
     const imgurl:string = 'https://image.tmdb.org/t/p/w500';
     return data.results.map((movie: Movie) => ({
+        id: movie.id,
         title: movie.title,
         overview: movie.overview,
         release_date: movie.release_date,
@@ -18,6 +18,7 @@ function simplifyPopularMovies(data: PopularMovieResponse): SimplifiedMovie[] {
 function simplifyUpcomingMovies(data: UpcomingMovieResponse): SimplifiedMovie[] {
     const imgurl:string = 'https://image.tmdb.org/t/p/w500';
     return data.results.map((movie: Movie) => ({
+        id: movie.id,
         title: movie.title,
         overview: movie.overview,
         release_date: movie.release_date,
@@ -42,17 +43,7 @@ function orderedButtons(buttons: Button[]): HTMLElement {
     return buttonsContainer;
 }
 
-function appendMoviesToContainer(movies: SimplifiedMovie[], moviesContainer:MoviesContainer ): void {
-    movies.forEach(movie => {
-        const moviePreview = new MoviePreview(
-            movie.title,
-            movie.poster_path,
-            movie.overview,
-            movie.release_date
-        );
-        moviesContainer.appendMovie(moviePreview.render());
-    });
-}
 
 
-export { simplifyPopularMovies, simplifyUpcomingMovies, randomMovieBanner, orderedButtons, appendMoviesToContainer};
+
+export { simplifyPopularMovies, simplifyUpcomingMovies, randomMovieBanner, orderedButtons};

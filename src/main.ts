@@ -4,12 +4,13 @@ import { fetchPopularMovies, fetchTopRatedMovies, fetchUpcomingMovies, fetchSear
 import './styles/styles.css';
 import { Header } from './components/header';
 import { Button } from './components/button';
+import { Favourites } from './components/favorites';
 import { MoviesContainer } from './components/movie-container';
 import { SearchBar } from './components/search-bar';
 import { SimplifiedMovie } from './models/types';
-import { randomMovieBanner, orderedButtons, appendMoviesToContainer } from './utils/helpers';
+import { randomMovieBanner, orderedButtons} from './utils/helpers';
 import { MovieType } from './models/enums';
-
+import { MoviePreview } from './components/movie-preview';
 
 let count:number = 1;
 let moviesContainer = new MoviesContainer();
@@ -19,9 +20,13 @@ async function renderApp() {
     
     
     const popularMovies: SimplifiedMovie[] = await fetchPopularMovies();
+    const favourites = new Favourites();
     // Create a new instance of the Header class and append it to the body of the document
-    const header = new Header('Movie App');
+    const header = new Header('Movie App', favourites.toggleVisibility );
     document.body.appendChild(header.render());
+
+    
+    document.body.appendChild(favourites.render());
 
 
     // Create a new instance of the Banner class and append it to the body of the document
@@ -44,7 +49,7 @@ async function renderApp() {
 
     // Create a new instance of the MoviesContainer class and append it to the body of the document
     
-    appendMoviesToContainer(popularMovies, moviesContainer);
+    appendMoviesToContainer(popularMovies);
     document.body.appendChild(  moviesContainer.render());
 
      // Create a new instance of the Button class for a button to Load More Movies
@@ -65,7 +70,7 @@ async function loadMoreMovies() : Promise<void>{
     else {
          movies = await fetchUpcomingMovies(count)
     }
-    appendMoviesToContainer(movies, moviesContainer);
+    appendMoviesToContainer(movies);
 }
 
 async function seePopularMovies() : Promise<void>{
@@ -73,7 +78,7 @@ async function seePopularMovies() : Promise<void>{
     moviesType = MovieType.POPULAR;
     const movies: SimplifiedMovie[] = await fetchPopularMovies();
     moviesContainer = new MoviesContainer();
-    appendMoviesToContainer(movies, moviesContainer);
+    appendMoviesToContainer(movies);
     const existingContainerElement = document.getElementById('movie-container');
     if (existingContainerElement && existingContainerElement.parentNode) {
         existingContainerElement.parentNode.replaceChild(moviesContainer.render(), existingContainerElement);
@@ -89,7 +94,7 @@ async function seeTopRatedMovies() : Promise<void>{
     moviesType = MovieType.TOP_RATED;
     const movies: SimplifiedMovie[] = await fetchTopRatedMovies();
     moviesContainer = new MoviesContainer();
-    appendMoviesToContainer(movies, moviesContainer);
+    appendMoviesToContainer(movies);
     const existingContainerElement = document.getElementById('movie-container');
     if (existingContainerElement && existingContainerElement.parentNode) {
         existingContainerElement.parentNode.replaceChild(moviesContainer.render(), existingContainerElement);
@@ -105,7 +110,7 @@ async function seeUpcomingMovies() : Promise<void>{
     moviesType = MovieType.UPCOMING;
     const movies: SimplifiedMovie[] = await fetchUpcomingMovies();
     moviesContainer = new MoviesContainer();
-    appendMoviesToContainer(movies, moviesContainer);
+    appendMoviesToContainer(movies);
     const existingContainerElement = document.getElementById('movie-container');
     if (existingContainerElement && existingContainerElement.parentNode) {
         existingContainerElement.parentNode.replaceChild(moviesContainer.render(), existingContainerElement);
@@ -121,7 +126,7 @@ async function seeSearchedMovies(searchTerm: string) : Promise<void>{
     moviesType = MovieType.SEARCH;
     const movies: SimplifiedMovie[] = await fetchSearchedMovies(searchTerm);
     moviesContainer = new MoviesContainer();
-    appendMoviesToContainer(movies, moviesContainer);
+    appendMoviesToContainer(movies);
     const existingContainerElement = document.getElementById('movie-container');
     if (existingContainerElement && existingContainerElement.parentNode) {
         existingContainerElement.parentNode.replaceChild(moviesContainer.render(), existingContainerElement);
@@ -132,6 +137,21 @@ async function seeSearchedMovies(searchTerm: string) : Promise<void>{
     }
 }
 
+function appendMoviesToContainer(movies: SimplifiedMovie[]): void {
+    movies.forEach(movie => {
+        const moviePreview = new MoviePreview(
+            movie.id,
+            movie.title,
+            movie.poster_path,
+            movie.overview,
+            movie.release_date,
+            () => {
+            }
+            
+        );
+        moviesContainer.appendMovie(moviePreview.render());
+    });
+}
 
 
 renderApp();
