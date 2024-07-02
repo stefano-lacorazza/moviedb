@@ -230,6 +230,7 @@ async function seeSearchedMovies(searchTerm: string) : Promise<void>{
  * collection of movies.
  */
 function appendMoviesToContainer(movies: SimplifiedMovie[]): void {
+    const keys = returnListStorageIds();
     movies.forEach(movie => {
         const moviePreview = new MoviePreview(
             movie.id,
@@ -239,6 +240,9 @@ function appendMoviesToContainer(movies: SimplifiedMovie[]): void {
             movie.release_date,
             favoriteMovie
         );
+        if (keys.includes(movie.id.toString())){
+            moviePreview.toggleHeartState();
+        }
         moviesContainer.appendMovie(moviePreview.render());
     });
 }
@@ -274,22 +278,51 @@ function favoriteMovie(movie: SimplifiedMovie): void {
         favourites.appendMovie(moviePreview.render());
     }
     
-    
 }
 
+/**
+ * Adds all movies stored in the local storage to the favorites list.
+ * 
+ * This function iterates over all items stored in the local storage. For each item,
+ * it checks if the item key is valid and then retrieves the item's value. The value,
+ * expected to be a JSON string representing a movie, is parsed into a movie object.
+ * A new MoviePreview instance is created for the movie, and this instance is then
+ * appended to the favorites list using its `render` method.
+ * 
+ * Assumptions:
+ * - Each item in the local storage represents a movie, stored as a JSON string.
+ * - The `MoviePreview` class is used to create a preview of the movie, which includes
+ *   the movie's id, title, poster path, overview, and release date. The `favoriteMovie`
+ *   parameter in the constructor is assumed to be a method or property related to
+ *   marking a movie as a favorite.
+ * - The `favourites` object has an `appendMovie` method that takes a rendered movie
+ *   preview and appends it to the favorites list.
+ * 
+ */
 function addAllMoviesFromLocalStorageToFavorites(): void {
-    for (let i = 0; i < localStorage.length; i++) {
+    const keys = returnListStorageIds(); // Use the refactored method to get keys
+    keys.forEach(key => {
+        const movieString = localStorage.getItem(key);
+        if (movieString) {
+            const movie = JSON.parse(movieString);
+            // Assuming movie is of type SimplifiedMovie and you have a method to add it to favorites
+            const moviePreview = new MoviePreview(movie.id, movie.title, movie.poster_path, movie.overview, movie.release_date, favoriteMovie);
+            favourites.appendMovie(moviePreview.render());
+        }
+    });
+}
+
+function returnListStorageIds(): string[]{
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i += 1) {
         const key = localStorage.key(i);
         if (key) {
-            const movieString = localStorage.getItem(key);
-            if (movieString) {
-                const movie = JSON.parse(movieString);
-                // Assuming movie is of type SimplifiedMovie and you have a method to add it to favorites
-                const moviePreview = new MoviePreview(movie.id, movie.title, movie.poster_path, movie.overview, movie.release_date, favoriteMovie);
-                favourites.appendMovie(moviePreview.render());
-            }
+            keys.push(key);
         }
     }
+    return keys;
 }
+
+
 renderApp();
 addAllMoviesFromLocalStorageToFavorites();

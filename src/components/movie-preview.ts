@@ -50,6 +50,15 @@ class MoviePreview {
         }
     }
 
+    unfillHeart(): void {
+        this.fillHeart = FillHeart.UNFILLED;
+        // Update the heart icon in the DOM to reflect the new state.
+        const heartIcon = document.querySelector(`#heartIcon-${this.id}`) as SVGElement;
+        if (heartIcon) {
+            heartIcon.setAttribute("fill", this.fillHeart);
+        }
+    }
+
     returnMovie(): SimplifiedMovie {
     
         return {
@@ -77,7 +86,7 @@ class MoviePreview {
                                 fill=${this.fillHeart}
                                 width="50"
                                 height="50"
-                                class="bi bi-heart-fill position-absolute p-2"
+                                class="bi position-absolute p-2"
                                 viewBox="0 -2 18 22"
                                 style="pointer-events: auto;"
                             >
@@ -104,10 +113,12 @@ class MoviePreview {
     `;
     // Add the click event listener to the heart icon
     const heartIcon = div.querySelector(`#heartIcon-${this.id}`);
-    if (heartIcon) {
+    if (heartIcon ) {
         heartIcon.addEventListener('click', () => {
             this.toggleHeartState();
             this.onClick(this.returnMovie());
+            this.toggleHeartState();
+            this.toggleHeartState();
         });
  }
 
