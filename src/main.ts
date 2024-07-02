@@ -8,11 +8,13 @@ import { MoviesContainer } from './components/movie-container';
 import { SearchBar } from './components/search-bar';
 import { SimplifiedMovie } from './models/types';
 import { randomMovieBanner, orderedButtons, appendMoviesToContainer } from './utils/helpers';
-
+import { MovieType } from './models/enums';
 
 
 let count:number = 1;
 let moviesContainer = new MoviesContainer();
+let moviesType: MovieType = MovieType.POPULAR;
+
 async function renderApp() {
     
     
@@ -53,12 +55,22 @@ async function renderApp() {
 
 async function loadMoreMovies() : Promise<void>{
     count +=1;
-    const movies: SimplifiedMovie[] = await fetchPopularMovies(count);
+    let movies: SimplifiedMovie[] = [];
+    if (moviesType === MovieType.POPULAR){
+         movies = await fetchPopularMovies(count);
+    }
+    else if (moviesType === MovieType.TOP_RATED){
+         movies = await fetchTopRatedMovies(count);
+    }
+    else {
+         movies = await fetchUpcomingMovies(count)
+    }
     appendMoviesToContainer(movies, moviesContainer);
 }
 
 async function seePopularMovies() : Promise<void>{
     count =1;
+    moviesType = MovieType.POPULAR;
     const movies: SimplifiedMovie[] = await fetchPopularMovies();
     moviesContainer = new MoviesContainer();
     appendMoviesToContainer(movies, moviesContainer);
@@ -74,6 +86,7 @@ async function seePopularMovies() : Promise<void>{
 
 async function seeTopRatedMovies() : Promise<void>{
     count =1;
+    moviesType = MovieType.TOP_RATED;
     const movies: SimplifiedMovie[] = await fetchTopRatedMovies();
     moviesContainer = new MoviesContainer();
     appendMoviesToContainer(movies, moviesContainer);
@@ -89,6 +102,7 @@ async function seeTopRatedMovies() : Promise<void>{
 
 async function seeUpcomingMovies() : Promise<void>{
     count =1;
+    moviesType = MovieType.UPCOMING;
     const movies: SimplifiedMovie[] = await fetchUpcomingMovies();
     moviesContainer = new MoviesContainer();
     appendMoviesToContainer(movies, moviesContainer);
