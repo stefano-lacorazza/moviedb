@@ -1,6 +1,6 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { fetchPopularMovies, fetchTopRatedMovies } from './api/api-handler';
+import { fetchPopularMovies, fetchTopRatedMovies, fetchUpcomingMovies } from './api/api-handler';
 import './styles/styles.css';
 import { Header } from './components/header';
 import { Button } from './components/button';
@@ -29,8 +29,8 @@ async function renderApp() {
 
     // Create a new instances of the Buttons class for a button to display the popular movies,upcoming movies and top rated movies
     const popularMoviesButton = new Button('Popular', seePopularMovies);
-    const upcomingMoviesButton = new Button('Upcoming', seeTopRatedMovies);
-    const topRatedMoviesButton = new Button('Top Rated', () => {});
+    const upcomingMoviesButton = new Button('Upcoming', seeUpcomingMovies);
+    const topRatedMoviesButton = new Button('Top Rated', seeTopRatedMovies);
 
     // Append the three buttons to the body of the document side by side
     const buttonsContainer = orderedButtons([popularMoviesButton, upcomingMoviesButton, topRatedMoviesButton]);
@@ -86,4 +86,21 @@ async function seeTopRatedMovies() : Promise<void>{
         document.body.appendChild(moviesContainer.render());
     }
 }
+
+async function seeUpcomingMovies() : Promise<void>{
+    count =1;
+    const movies: SimplifiedMovie[] = await fetchUpcomingMovies();
+    moviesContainer = new MoviesContainer();
+    appendMoviesToContainer(movies, moviesContainer);
+    const existingContainerElement = document.getElementById('movie-container');
+    if (existingContainerElement && existingContainerElement.parentNode) {
+        existingContainerElement.parentNode.replaceChild(moviesContainer.render(), existingContainerElement);
+    } else {
+        // If the container doesn't exist or has no ID, append the new container to the body
+        // This might not be the desired behavior if you have a specific place in the DOM for the container
+        document.body.appendChild(moviesContainer.render());
+    }
+}
+
+
 renderApp();
