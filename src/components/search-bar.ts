@@ -8,7 +8,7 @@ class SearchBar {
 
   searchInput: HTMLInputElement;
 
-  constructor(placeholder: string = "Search...") {
+  constructor( onClick: (query:string) => Promise<void>, placeholder: string = "Search...") {
     this.placeholder = placeholder;
      // Create search input
      this.searchInput = document.createElement("input");
@@ -20,9 +20,13 @@ class SearchBar {
      this.searchButton = document.createElement("button");
      this.searchButton.className = "btn btn-outline-secondary";
      this.searchButton.textContent = "Search";
-     this.searchButton.onclick = () => this.onSearch(this.searchInput.value);
+     this.searchButton.onclick = () => onClick(this.getSearchInputValue());
  
 
+  }
+
+  public getSearchInputValue(): string {
+    return this.searchInput.value;
   }
 
 render(): HTMLElement {
@@ -60,11 +64,6 @@ render(): HTMLElement {
   return wrapper; // Return the wrapper for further manipulation if needed
 }
 
-  onSearch(value: string) {
-    console.log(`Search for: ${value}`);
-    // Implement the search functionality here
-    // For example, you could make an API call to search for the value
-  }
 }
 
 // Usage

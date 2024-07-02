@@ -1,6 +1,6 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { fetchPopularMovies, fetchTopRatedMovies, fetchUpcomingMovies } from './api/api-handler';
+import { fetchPopularMovies, fetchTopRatedMovies, fetchUpcomingMovies, fetchSearchedMovies } from './api/api-handler';
 import './styles/styles.css';
 import { Header } from './components/header';
 import { Button } from './components/button';
@@ -39,7 +39,7 @@ async function renderApp() {
     document.body.appendChild(buttonsContainer);
 
     // Create a new instance of the SearchBar class and append it to the body of the document
-    const searchBar = new SearchBar('Search');
+    const searchBar = new SearchBar(seeSearchedMovies, 'Search Movies...');
     document.body.appendChild(searchBar.render());
 
     // Create a new instance of the MoviesContainer class and append it to the body of the document
@@ -115,6 +115,23 @@ async function seeUpcomingMovies() : Promise<void>{
         document.body.appendChild(moviesContainer.render());
     }
 }
+
+async function seeSearchedMovies(searchTerm: string) : Promise<void>{
+    count =1;
+    moviesType = MovieType.SEARCH;
+    const movies: SimplifiedMovie[] = await fetchSearchedMovies(searchTerm);
+    moviesContainer = new MoviesContainer();
+    appendMoviesToContainer(movies, moviesContainer);
+    const existingContainerElement = document.getElementById('movie-container');
+    if (existingContainerElement && existingContainerElement.parentNode) {
+        existingContainerElement.parentNode.replaceChild(moviesContainer.render(), existingContainerElement);
+    } else {
+        // If the container doesn't exist or has no ID, append the new container to the body
+        // This might not be the desired behavior if you have a specific place in the DOM for the container
+        document.body.appendChild(moviesContainer.render());
+    }
+}
+
 
 
 renderApp();
