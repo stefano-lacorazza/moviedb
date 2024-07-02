@@ -10,6 +10,7 @@ class MoviesContainer {
   render() : HTMLElement{
     const albumDiv = document.createElement('div');
     albumDiv.className = 'album py-5 bg-light';
+    albumDiv.id = 'movie-container';
 
     const containerDiv = document.createElement('div');
     containerDiv.className = 'container';
