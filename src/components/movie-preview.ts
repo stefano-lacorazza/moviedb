@@ -1,4 +1,5 @@
 import { FillHeart } from "../models/enums";
+import { SimplifiedMovie } from "../models/types";
 
 class MoviePreview {
     id: number;
@@ -13,9 +14,9 @@ class MoviePreview {
 
     fillHeart: FillHeart;
 
-    private onClick: () => void;
+    private onClick: (movie: SimplifiedMovie) => void;
 
-    constructor(id:number, title: string, img: string, description: string, releaseDate: string, onClick: () => void) {
+    constructor(id:number, title: string, img: string, description: string, releaseDate: string, onClick: (movie:SimplifiedMovie) => void) {
         this.id = id;
         this.title = title;
         this.img = img;
@@ -34,6 +35,16 @@ class MoviePreview {
         }
     }
 
+    returnMovie(): SimplifiedMovie {
+    
+        return {
+            id: this.id,
+            title: this.title,
+            overview: this.description,
+            release_date: this.releaseDate,
+            poster_path: this.img
+        };
+    }
     
     render(): HTMLDivElement {
         const div = document.createElement('div');
@@ -81,12 +92,14 @@ class MoviePreview {
     if (heartIcon) {
         heartIcon.addEventListener('click', () => {
             this.toggleHeartState();
-            this.onClick();
+            this.onClick(this.returnMovie());
         });
  }
 
     return div;
 }
+
+
 }
 
 export { MoviePreview };
