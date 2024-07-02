@@ -1,92 +1,157 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { fetchPopularMovies } from './api/api-handler';
+import { fetchPopularMovies, fetchTopRatedMovies, fetchUpcomingMovies, fetchSearchedMovies } from './api/api-handler';
 import './styles/styles.css';
-import { MoviePreview } from './components/movie-preview';
 import { Header } from './components/header';
-import { Banner } from './components/banner';
 import { Button } from './components/button';
+import { Favourites } from './components/favorites';
 import { MoviesContainer } from './components/movie-container';
 import { SearchBar } from './components/search-bar';
 import { SimplifiedMovie } from './models/types';
+import { randomMovieBanner, orderedButtons} from './utils/helpers';
+import { MovieType } from './models/enums';
+import { MoviePreview } from './components/movie-preview';
+
+let count:number = 1;
+let moviesContainer = new MoviesContainer();
+let moviesType: MovieType = MovieType.POPULAR;
 
 async function renderApp() {
+    
+    
     const popularMovies: SimplifiedMovie[] = await fetchPopularMovies();
+    const favourites = new Favourites();
     // Create a new instance of the Header class and append it to the body of the document
-    const header = new Header('Movie App');
+    const header = new Header('Movie App', favourites.toggleVisibility );
     document.body.appendChild(header.render());
+
+    
+    document.body.appendChild(favourites.render());
 
 
     // Create a new instance of the Banner class and append it to the body of the document
-
-    const randomIndex = Math.floor(Math.random() * popularMovies.length);
-    const randomMovie = popularMovies[randomIndex];
-
-    const banner = new Banner(
-        randomMovie.title,
-        randomMovie.overview,
-        randomMovie.poster_path
-    );
+    const banner = randomMovieBanner(popularMovies);
     document.body.appendChild(banner.render());
 
 
-    // Create a new instance of the Button class for a button to display the popular movies
-    const popularMoviesButton = new Button('Popular', () => {
-        });
-
-    // Create a new instance of the Button class for a button to display the upcoming movies
-    const upcomingMoviesButton = new Button('Upcoming', () => {});
-
-    // Create a new instance of the Button class for a button to display the top rated movies
-    const topRatedMoviesButton = new Button('Top Rated', () => {});
+    // Create a new instances of the Buttons class for a button to display the popular movies,upcoming movies and top rated movies
+    const popularMoviesButton = new Button('Popular', seePopularMovies);
+    const upcomingMoviesButton = new Button('Upcoming', seeUpcomingMovies);
+    const topRatedMoviesButton = new Button('Top Rated', seeTopRatedMovies);
 
     // Append the three buttons to the body of the document side by side
-    const buttonsContainer = document.createElement('div');
-    buttonsContainer.style.display = 'flex';
-    buttonsContainer.style.justifyContent = 'center';
-    buttonsContainer.style.alignItems = 'center';
-    buttonsContainer.style.flexDirection = 'row'; 
-    buttonsContainer.style.gap = '10px'; 
-    buttonsContainer.appendChild(upcomingMoviesButton.buttonElement);
-    buttonsContainer.appendChild(topRatedMoviesButton.buttonElement);
-    buttonsContainer.appendChild(popularMoviesButton.buttonElement);
+    const buttonsContainer = orderedButtons([popularMoviesButton, upcomingMoviesButton, topRatedMoviesButton]);
     document.body.appendChild(buttonsContainer);
 
     // Create a new instance of the SearchBar class and append it to the body of the document
-    const searchBar = new SearchBar('Search');
+    const searchBar = new SearchBar(seeSearchedMovies, 'Search Movies...');
     document.body.appendChild(searchBar.render());
 
     // Create a new instance of the MoviesContainer class and append it to the body of the document
-    const moviesContainer = new MoviesContainer();
-
-   
-    popularMovies.forEach(movie => {
-        const moviePreview = new MoviePreview(
-            movie.title,
-            movie.poster_path,
-            movie.overview,
-            movie.release_date
-        );
-        moviesContainer.appendMovie(moviePreview.render());
-    });
-
     
+    appendMoviesToContainer(popularMovies);
     document.body.appendChild(  moviesContainer.render());
+
      // Create a new instance of the Button class for a button to Load More Movies
-    const loadMoreMoviesButton = new Button('Load More', () => {});
-
-
-
-    const buttonsContainer2= document.createElement('div');
-    buttonsContainer2.style.display = 'flex';
-    buttonsContainer2.style.justifyContent = 'center';
-    buttonsContainer2.style.alignItems = 'center';
-    buttonsContainer2.style.flexDirection = 'row'; 
-    buttonsContainer2.style.gap = '10px'; 
-    buttonsContainer2.appendChild(loadMoreMoviesButton.buttonElement);
+    const loadMoreMoviesButton = new Button('Load More', loadMoreMovies);
+    const buttonsContainer2= orderedButtons([loadMoreMoviesButton]);
     document.body.appendChild(buttonsContainer2);
 }
 
+async function loadMoreMovies() : Promise<void>{
+    count +=1;
+    let movies: SimplifiedMovie[] = [];
+    if (moviesType === MovieType.POPULAR){
+         movies = await fetchPopularMovies(count);
+    }
+    else if (moviesType === MovieType.TOP_RATED){
+         movies = await fetchTopRatedMovies(count);
+    }
+    else {
+         movies = await fetchUpcomingMovies(count)
+    }
+    appendMoviesToContainer(movies);
+}
 
-// Call the function to render the app
+async function seePopularMovies() : Promise<void>{
+    count =1;
+    moviesType = MovieType.POPULAR;
+    const movies: SimplifiedMovie[] = await fetchPopularMovies();
+    moviesContainer = new MoviesContainer();
+    appendMoviesToContainer(movies);
+    const existingContainerElement = document.getElementById('movie-container');
+    if (existingContainerElement && existingContainerElement.parentNode) {
+        existingContainerElement.parentNode.replaceChild(moviesContainer.render(), existingContainerElement);
+    } else {
+        // If the container doesn't exist or has no ID, append the new container to the body
+        // This might not be the desired behavior if you have a specific place in the DOM for the container
+        document.body.appendChild(moviesContainer.render());
+    }
+}
+
+async function seeTopRatedMovies() : Promise<void>{
+    count =1;
+    moviesType = MovieType.TOP_RATED;
+    const movies: SimplifiedMovie[] = await fetchTopRatedMovies();
+    moviesContainer = new MoviesContainer();
+    appendMoviesToContainer(movies);
+    const existingContainerElement = document.getElementById('movie-container');
+    if (existingContainerElement && existingContainerElement.parentNode) {
+        existingContainerElement.parentNode.replaceChild(moviesContainer.render(), existingContainerElement);
+    } else {
+        // If the container doesn't exist or has no ID, append the new container to the body
+        // This might not be the desired behavior if you have a specific place in the DOM for the container
+        document.body.appendChild(moviesContainer.render());
+    }
+}
+
+async function seeUpcomingMovies() : Promise<void>{
+    count =1;
+    moviesType = MovieType.UPCOMING;
+    const movies: SimplifiedMovie[] = await fetchUpcomingMovies();
+    moviesContainer = new MoviesContainer();
+    appendMoviesToContainer(movies);
+    const existingContainerElement = document.getElementById('movie-container');
+    if (existingContainerElement && existingContainerElement.parentNode) {
+        existingContainerElement.parentNode.replaceChild(moviesContainer.render(), existingContainerElement);
+    } else {
+        // If the container doesn't exist or has no ID, append the new container to the body
+        // This might not be the desired behavior if you have a specific place in the DOM for the container
+        document.body.appendChild(moviesContainer.render());
+    }
+}
+
+async function seeSearchedMovies(searchTerm: string) : Promise<void>{
+    count =1;
+    moviesType = MovieType.SEARCH;
+    const movies: SimplifiedMovie[] = await fetchSearchedMovies(searchTerm);
+    moviesContainer = new MoviesContainer();
+    appendMoviesToContainer(movies);
+    const existingContainerElement = document.getElementById('movie-container');
+    if (existingContainerElement && existingContainerElement.parentNode) {
+        existingContainerElement.parentNode.replaceChild(moviesContainer.render(), existingContainerElement);
+    } else {
+        // If the container doesn't exist or has no ID, append the new container to the body
+        // This might not be the desired behavior if you have a specific place in the DOM for the container
+        document.body.appendChild(moviesContainer.render());
+    }
+}
+
+function appendMoviesToContainer(movies: SimplifiedMovie[]): void {
+    movies.forEach(movie => {
+        const moviePreview = new MoviePreview(
+            movie.id,
+            movie.title,
+            movie.poster_path,
+            movie.overview,
+            movie.release_date,
+            () => {
+            }
+            
+        );
+        moviesContainer.appendMovie(moviePreview.render());
+    });
+}
+
+
 renderApp();

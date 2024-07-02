@@ -5,6 +5,16 @@ interface PopularMovieResponse {
     total_pages: number;
   }
   
+
+  interface UpcomingMovieResponse {
+    dates: {
+      maximum: string;
+      minimum: string;
+    };
+    page: number;
+    results: Movie[];
+  }
+
 interface Movie {
   adult: boolean; // Defaults to true
   backdrop_path: string;
@@ -23,10 +33,11 @@ interface Movie {
 }
 
 interface SimplifiedMovie {
+    id: number;
     title: string;
     overview: string;
     release_date: string;
     poster_path: string;
 }
 
-export type { PopularMovieResponse, Movie, SimplifiedMovie}
+export type { PopularMovieResponse, UpcomingMovieResponse, Movie, SimplifiedMovie}

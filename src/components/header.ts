@@ -1,8 +1,9 @@
 // Define a Header component
 class Header {
     // Constructor to initialize the component
-    constructor(private title: string) {
+    constructor(private title: string, private onClick: () => void) {
         this.title = title;
+        this.onClick = onClick;
     }
 
     // Method to render the component
@@ -25,6 +26,9 @@ class Header {
         button.dataset.bsTarget = '#offcanvasRight';
         button.setAttribute('aria-controls', 'offcanvasRight');
         button.innerHTML = '<span class="navbar-toggler-icon"></span>';
+
+         // Add an event listener to the button
+         button.addEventListener('click', this.onClick);
 
         container.appendChild(brandLink);
         container.appendChild(button);

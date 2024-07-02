@@ -5,11 +5,13 @@ class MoviesContainer {
     this.filmContainerDiv = document.createElement('div');
     this.filmContainerDiv.className = 'row';
     this.filmContainerDiv.id = 'film-container';
+    this.filmContainerDiv.style.pointerEvents = 'none';
   }
 
   render() : HTMLElement{
     const albumDiv = document.createElement('div');
     albumDiv.className = 'album py-5 bg-light';
+    albumDiv.id = 'movie-container';
 
     const containerDiv = document.createElement('div');
     containerDiv.className = 'container';
