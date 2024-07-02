@@ -64,7 +64,7 @@ class MoviePreview {
     render(): HTMLDivElement {
         const div = document.createElement('div');
         div.className = "col-lg-3 col-md-4 col-12 p-2";
-        div.id = this.id.toString();
+        div.id = `movie-${this.id.toString()}`;
         div.innerHTML = `
                             <div class="card shadow-sm">
                                 <img

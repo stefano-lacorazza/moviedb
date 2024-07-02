@@ -265,6 +265,7 @@ function favoriteMovie(movie: SimplifiedMovie): void {
     // Save the stringified movies to local storage
     if (localStorage.getItem(movie.id.toString())){
         localStorage.removeItem(movie.id.toString());
+        favourites.removeMovie(movie.id);
 
     }
     else{
@@ -275,4 +276,20 @@ function favoriteMovie(movie: SimplifiedMovie): void {
     
     
 }
+
+function addAllMoviesFromLocalStorageToFavorites(): void {
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key) {
+            const movieString = localStorage.getItem(key);
+            if (movieString) {
+                const movie = JSON.parse(movieString);
+                // Assuming movie is of type SimplifiedMovie and you have a method to add it to favorites
+                const moviePreview = new MoviePreview(movie.id, movie.title, movie.poster_path, movie.overview, movie.release_date, favoriteMovie);
+                favourites.appendMovie(moviePreview.render());
+            }
+        }
+    }
+}
 renderApp();
+addAllMoviesFromLocalStorageToFavorites();

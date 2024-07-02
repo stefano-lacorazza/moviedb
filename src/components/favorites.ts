@@ -80,6 +80,18 @@ class Favourites {
     appendMovie(movie: HTMLElement): void {
         this.bodyDiv.appendChild(movie);
     }
+
+    /**
+     * Looks for a child element with the given ID and removes it from the favorites component's body.
+     * 
+     * @param {number} id - The id of the movie element to remove.
+     */
+    removeMovie(id: number): void {
+        const movieElement = this.bodyDiv.querySelector(`#movie-${id}`);
+        if (movieElement) {
+            this.bodyDiv.removeChild(movieElement);
+        }
+    }
 }
 
 export { Favourites };
