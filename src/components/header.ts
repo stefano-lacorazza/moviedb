@@ -1,4 +1,12 @@
-// Define a Header component
+/**
+ * Represents a Header component for a web application.
+ * 
+ * This class encapsulates the functionality and structure of a Header component, including a title and a clickable button. 
+ * The header is styled using Bootstrap's navbar component classes to ensure a consistent and responsive design. The button 
+ * within the header is configured to toggle an offcanvas component, making it suitable for use in applications with 
+ * offcanvas navigation or information panels.
+ * 
+ */
 class Header {
     // Constructor to initialize the component
     constructor(private title: string, private onClick: () => void) {
@@ -39,8 +47,3 @@ class Header {
 }
 
 export { Header };
-/*
-// Example usage:
-const headerComponent = new Header("My App");
-document.body.innerHTML = headerComponent.render();
-*/

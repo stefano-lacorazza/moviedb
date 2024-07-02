@@ -1,6 +1,15 @@
-// Ensure you have the TypeScript type definitions for Bootstrap if you're using TypeScript features.
-// This example assumes you're working in a plain TypeScript environment without a specific framework like React or Angular.
-
+/**
+ * Represents a search bar component.
+ * 
+ * This class encapsulates the functionality for creating and managing a search bar, including a text input for the search query
+ * and a button to initiate the search. The search bar is styled using Bootstrap classes to ensure a consistent and modern appearance.
+ * The constructor accepts a callback function that is invoked when the search button is clicked, allowing for custom search handling.
+ * 
+ * The `render` method constructs the HTML structure of the search bar, including a container for layout management and input
+ * group elements for visual integration of the search input and button. The search bar is designed to be responsive and
+ * visually appealing, with a fixed width and centered positioning within its parent container.
+ * 
+ */
 class SearchBar {
   placeholder: string;
 

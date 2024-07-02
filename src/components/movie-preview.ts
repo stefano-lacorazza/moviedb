@@ -1,6 +1,21 @@
 import { FillHeart } from "../models/enums";
 import { SimplifiedMovie } from "../models/types";
 
+
+/**
+ * Represents a preview of a movie in a web application.
+ * 
+ * This class encapsulates the properties and functionality of a movie preview, including its title, image, description,
+ * release date, and a heart icon to indicate user preference. The heart icon can be toggled between filled and unfilled
+ * states, representing a user's liking or disliking of the movie. The class also provides a method to return a simplified
+ * version of the movie's data, suitable for use in other parts of the application.
+ * 
+ * The constructor initializes the movie preview with the provided details and an onClick callback function, which is
+ * called when the heart icon is clicked. The `toggleHeartState` method updates the heart icon's fill state in the DOM,
+ * and the `render` method generates the HTML structure for the movie preview, including setting up the click event
+ * listener for the heart icon.
+ * 
+ */
 class MoviePreview {
     id: number;
 

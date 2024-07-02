@@ -1,3 +1,18 @@
+
+/**
+ * Defines interfaces for movie responses and movie data structures.
+ * 
+ * `PopularMovieResponse` and `UpcomingMovieResponse` interfaces are designed to model the responses from an API for popular and upcoming movies, respectively. 
+ * Both include a list of movies (`results`), pagination data (`page`), and for `PopularMovieResponse`, total results and pages information. 
+ * `UpcomingMovieResponse` includes date range information (`dates`) for the upcoming movies.
+ * 
+ * The `Movie` interface represents the detailed structure of a movie, including metadata such as title, release date, and poster path. 
+ * It also includes fields for adult content and video availability, which default to true but are not explicitly set in the interface.
+ * 
+ * `SimplifiedMovie` provides a reduced version of the movie data, focusing on essential fields used for display purposes in the application.
+ * 
+ * These interfaces are exported for use across the application, ensuring type safety and consistency when handling movie data.
+ */
 interface PopularMovieResponse {
     results: Movie[];
     page: number;
