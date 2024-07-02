@@ -39,6 +39,9 @@ function orderedButtons(buttons: Button[]): HTMLElement {
     buttonsContainer.style.alignItems = 'center';
     buttonsContainer.style.flexDirection = 'row'; 
     buttonsContainer.style.gap = '10px'; 
+    // Add space above and below
+    buttonsContainer.style.marginTop = '20px'; // Adjust the value as needed
+    buttonsContainer.style.marginBottom = '20px'; // Adjust the value as needed
     buttons.forEach(button => buttonsContainer.appendChild(button.buttonElement));
     return buttonsContainer;
 }

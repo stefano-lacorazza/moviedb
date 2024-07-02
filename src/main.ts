@@ -15,12 +15,12 @@ import { MoviePreview } from './components/movie-preview';
 let count:number = 1;
 let moviesContainer = new MoviesContainer();
 let moviesType: MovieType = MovieType.POPULAR;
-
+const favourites = new Favourites();
 async function renderApp() {
     
     
     const popularMovies: SimplifiedMovie[] = await fetchPopularMovies();
-    const favourites = new Favourites();
+
     // Create a new instance of the Header class and append it to the body of the document
     const header = new Header('Movie App', favourites.toggleVisibility );
     document.body.appendChild(header.render());
@@ -145,13 +145,25 @@ function appendMoviesToContainer(movies: SimplifiedMovie[]): void {
             movie.poster_path,
             movie.overview,
             movie.release_date,
-            () => {
-            }
-            
+            favoriteMovie
         );
         moviesContainer.appendMovie(moviePreview.render());
     });
 }
 
+function favoriteMovie(movie: SimplifiedMovie): void {
+    const movieString = JSON.stringify(movie);
+    // Save the stringified movies to local storage
+    if (localStorage.getItem(movie.id.toString())){
+        localStorage.removeItem(movie.id.toString());
 
+    }
+    else{
+        localStorage.setItem(movie.id.toString(), movieString);
+        const moviePreview = new MoviePreview(movie.id, movie.title, movie.poster_path, movie.overview, movie.release_date, favoriteMovie);
+        favourites.appendMovie(moviePreview.render());
+    }
+    
+    
+}
 renderApp();
