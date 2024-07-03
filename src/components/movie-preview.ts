@@ -86,7 +86,7 @@ class MoviePreview {
                                 fill=${this.fillHeart}
                                 width="50"
                                 height="50"
-                                class="bi position-absolute p-2"
+                                class=bi bi-heart-fill position-absolute p-2
                                 viewBox="0 -2 18 22"
                                 style="pointer-events: auto;"
                             >

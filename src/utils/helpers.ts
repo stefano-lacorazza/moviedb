@@ -66,6 +66,8 @@ function simplifyUpcomingMovies(data: UpcomingMovieResponse): SimplifiedMovie[] 
 function randomMovieBanner(movieList : SimplifiedMovie[]): Banner {
     const randomIndex = Math.floor(Math.random() * movieList.length);
     const randomMovie = movieList[randomIndex];
+
+    randomMovie.poster_path = randomMovie.poster_path.replace('w500', 'original');
     return new Banner(randomMovie.title, randomMovie.overview, randomMovie.poster_path);
 }
 
