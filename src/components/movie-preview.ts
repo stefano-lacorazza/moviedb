@@ -29,9 +29,11 @@ class MoviePreview {
 
     fillHeart: FillHeart;
 
+    vote_average: number;
+
     private onClick: (movie: SimplifiedMovie) => void;
 
-    constructor(id:number, title: string, img: string, description: string, releaseDate: string, onClick: (movie:SimplifiedMovie) => void) {
+    constructor(id:number, title: string, img: string, description: string, releaseDate: string,vote_average:number, onClick: (movie:SimplifiedMovie) => void) {
         this.id = id;
         this.title = title;
         this.img = img;
@@ -39,6 +41,7 @@ class MoviePreview {
         this.releaseDate = releaseDate;
         this.fillHeart = FillHeart.UNFILLED;
         this.onClick = onClick;
+        this.vote_average = vote_average;
     }
     
     toggleHeartState(): void {
@@ -66,7 +69,8 @@ class MoviePreview {
             title: this.title,
             overview: this.description,
             release_date: this.releaseDate,
-            poster_path: this.img
+            poster_path: this.img,
+            vote_average: this.vote_average,
         };
     }
     
@@ -74,7 +78,7 @@ class MoviePreview {
         const div = document.createElement('div');
         div.className = "col-lg-3 col-md-4 col-12 p-2";
         div.id = `movie-${this.id.toString()}`;
-        div.innerHTML = `
+div.innerHTML = `
                             <div class="card shadow-sm">
                                 <img
                                     src=${this.img}
@@ -86,7 +90,7 @@ class MoviePreview {
                                 fill=${this.fillHeart}
                                 width="50"
                                 height="50"
-                                class="bi position-absolute p-2"
+                                class="bi bi-heart-fill position-absolute p-2"
                                 viewBox="0 -2 18 22"
                                 style="pointer-events: auto;"
                             >
@@ -94,7 +98,7 @@ class MoviePreview {
                                     fill-rule="evenodd"
                                     d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
                                 />
-                            </svg>
+                            </svg><span style="position: relative; margin-left: 10px;"><kbd>${this.vote_average.toFixed(1)}/10</kbd></span>
                                 <div class="card-body">
                                     <p class="card-text truncate">
                                     ${this.description}

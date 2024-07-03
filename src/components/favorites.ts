@@ -53,6 +53,9 @@ class Favourites {
 
         this.container.appendChild(headerDiv);
         this.container.appendChild(this.bodyDiv);
+
+         // Bind the `toggleVisibility` method to the current instance
+         this.toggleVisibility = this.toggleVisibility.bind(this);
     }
 
     /**

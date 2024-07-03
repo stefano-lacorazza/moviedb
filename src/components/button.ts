@@ -13,7 +13,11 @@
  * document.body.appendChild(myButton.buttonElement);
  */
 class Button {
-    /**
+    
+  
+  private id: string;
+  
+  /**
    * The text displayed on the button.
    */
   private text: string;
@@ -42,7 +46,8 @@ class Button {
    * @param {string} styleClass - The CSS class for styling the button. Defaults to 'btn-primary'.
    */
 
-  constructor(text: string, onClick: () => Promise<void>, styleClass: string = 'btn-primary') {
+  constructor(text: string, onClick: () => Promise<void>, id: string, styleClass: string = 'btn-primary') {
+    this.id = id;
     this.text = text;
     this.onClick = onClick;
     this.styleClass = styleClass;
@@ -59,6 +64,7 @@ class Button {
     const button = document.createElement('button');
     button.className = `btn ${this.styleClass}`;
     button.textContent = this.text;
+    button.id = this.id;
     return button;
   }
 

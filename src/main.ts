@@ -45,7 +45,7 @@ async function renderApp() {
     const popularMovies: SimplifiedMovie[] = await fetchPopularMovies();
 
     // Create a new instance of the Header class and append it to the body of the document
-    const header = new Header('Movie App', favourites.toggleVisibility );
+    const header = new Header('Franflix', favourites.toggleVisibility );
     document.body.appendChild(header.render());
 
     
@@ -58,9 +58,9 @@ async function renderApp() {
 
 
     // Create a new instances of the Buttons class for a button to display the popular movies,upcoming movies and top rated movies
-    const popularMoviesButton = new Button('Popular', seePopularMovies);
-    const upcomingMoviesButton = new Button('Upcoming', seeUpcomingMovies);
-    const topRatedMoviesButton = new Button('Top Rated', seeTopRatedMovies);
+    const popularMoviesButton = new Button('Popular', seePopularMovies, "popular");
+    const upcomingMoviesButton = new Button('Upcoming', seeUpcomingMovies, "upcoming");
+    const topRatedMoviesButton = new Button('Top Rated', seeTopRatedMovies, "top_rated");
 
     // Append the three buttons to the body of the document side by side
     const buttonsContainer = orderedButtons([popularMoviesButton, upcomingMoviesButton, topRatedMoviesButton]);
@@ -76,7 +76,7 @@ async function renderApp() {
     document.body.appendChild(  moviesContainer.render());
 
      // Create a new instance of the Button class for a button to Load More Movies
-    const loadMoreMoviesButton = new Button('Load More', loadMoreMovies);
+    const loadMoreMoviesButton = new Button('Load More', loadMoreMovies, "load-more");
     const buttonsContainer2= orderedButtons([loadMoreMoviesButton]);
     document.body.appendChild(buttonsContainer2);
 }
@@ -238,9 +238,12 @@ function appendMoviesToContainer(movies: SimplifiedMovie[]): void {
             movie.poster_path,
             movie.overview,
             movie.release_date,
+            movie.vote_average,
             favoriteMovie
         );
-        if (keys.includes(movie.id.toString())){
+
+        if (keys.includes(movie.id.toString().trim())){
+
             moviePreview.toggleHeartState();
         }
         moviesContainer.appendMovie(moviePreview.render());
@@ -265,19 +268,25 @@ function appendMoviesToContainer(movies: SimplifiedMovie[]): void {
  * UI to reflect these changes in real-time.
  */
 function favoriteMovie(movie: SimplifiedMovie): void {
-    const movieString = JSON.stringify(movie);
-    // Save the stringified movies to local storage
-    if (localStorage.getItem(movie.id.toString())){
-        localStorage.removeItem(movie.id.toString());
-        favourites.removeMovie(movie.id);
+    // Retrieve the favoriteMovies array from localStorage, or initialize it as an empty array if it doesn't exist
+    const favoriteMovies = JSON.parse(localStorage.getItem('favoriteMovies') || '[]');
 
-    }
-    else{
-        localStorage.setItem(movie.id.toString(), movieString);
-        const moviePreview = new MoviePreview(movie.id, movie.title, movie.poster_path, movie.overview, movie.release_date, favoriteMovie);
+    // Find the index of the movie in the array
+    const movieIndex = favoriteMovies.findIndex((m: SimplifiedMovie) => m.id === movie.id);
+
+    if (movieIndex > -1) {
+        // If the movie is already in the array, remove it
+        favoriteMovies.splice(movieIndex, 1);
+        favourites.removeMovie(movie.id);
+    } else {
+        // If the movie is not in the array, add it
+        favoriteMovies.push(movie);
+        const moviePreview = new MoviePreview(movie.id, movie.title, movie.poster_path, movie.overview, movie.release_date,movie.vote_average, favoriteMovie);
         favourites.appendMovie(moviePreview.render());
     }
-    
+
+    // Save the updated favoriteMovies array to localStorage
+    localStorage.setItem('favoriteMovies', JSON.stringify(favoriteMovies));
 }
 
 /**
@@ -300,27 +309,26 @@ function favoriteMovie(movie: SimplifiedMovie): void {
  * 
  */
 function addAllMoviesFromLocalStorageToFavorites(): void {
-    const keys = returnListStorageIds(); // Use the refactored method to get keys
-    keys.forEach(key => {
-        const movieString = localStorage.getItem(key);
-        if (movieString) {
-            const movie = JSON.parse(movieString);
-            // Assuming movie is of type SimplifiedMovie and you have a method to add it to favorites
-            const moviePreview = new MoviePreview(movie.id, movie.title, movie.poster_path, movie.overview, movie.release_date, favoriteMovie);
-            favourites.appendMovie(moviePreview.render());
-        }
-    });
+    // Retrieve the favoriteMovies array from localStorage
+    const favoriteMovies = JSON.parse(localStorage.getItem('favoriteMovies') || '[]');
+    // Iterate over the favoriteMovies array
+// Iterate over the favoriteMovies array
+    favoriteMovies.forEach((movie: SimplifiedMovie) => {
+    // Create a new MoviePreview instance for each movie
+    const moviePreview = new MoviePreview(movie.id, movie.title, movie.poster_path, movie.overview, movie.release_date, movie.vote_average, favoriteMovie);
+    // Append the moviePreview to the favorites list
+    favourites.appendMovie(moviePreview.render());
+});
 }
 
-function returnListStorageIds(): string[]{
-    const keys = [];
-    for (let i = 0; i < localStorage.length; i += 1) {
-        const key = localStorage.key(i);
-        if (key) {
-            keys.push(key);
-        }
-    }
-    return keys;
+function returnListStorageIds(): string[] {
+    // Retrieve the favoriteMovies array from localStorage
+    const favoriteMovies = JSON.parse(localStorage.getItem('favoriteMovies') || '[]');
+    // Extract and return the IDs from the favoriteMovies array
+    
+    const keys: string[] = favoriteMovies.map((movie: { id: string }) => movie.id.toString().trim());
+
+    return keys
 }
 
 

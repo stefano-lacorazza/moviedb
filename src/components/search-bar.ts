@@ -52,6 +52,8 @@ render(): HTMLElement {
   // Smaller search input
   this.searchInput.className += " form-control-sm";
 
+  this.searchButton.id = "search";
+
   // Append the search button to the input group append element
   inputGroupAppend.appendChild(this.searchButton);
 

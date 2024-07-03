@@ -22,7 +22,8 @@ function simplifyPopularMovies(data: PopularMovieResponse): SimplifiedMovie[] {
         title: movie.title,
         overview: movie.overview,
         release_date: movie.release_date,
-        poster_path: imgurl+movie.poster_path
+        poster_path: imgurl+movie.poster_path,
+        vote_average: movie.vote_average
     }));
 }
 
@@ -46,7 +47,8 @@ function simplifyUpcomingMovies(data: UpcomingMovieResponse): SimplifiedMovie[] 
         title: movie.title,
         overview: movie.overview,
         release_date: movie.release_date,
-        poster_path: imgurl+movie.poster_path
+        poster_path: imgurl+movie.poster_path,
+        vote_average: movie.vote_average,
     }));
 }
 
@@ -66,6 +68,8 @@ function simplifyUpcomingMovies(data: UpcomingMovieResponse): SimplifiedMovie[] 
 function randomMovieBanner(movieList : SimplifiedMovie[]): Banner {
     const randomIndex = Math.floor(Math.random() * movieList.length);
     const randomMovie = movieList[randomIndex];
+
+    randomMovie.poster_path = randomMovie.poster_path.replace('w500', 'original');
     return new Banner(randomMovie.title, randomMovie.overview, randomMovie.poster_path);
 }
 
