@@ -22,7 +22,8 @@ function simplifyPopularMovies(data: PopularMovieResponse): SimplifiedMovie[] {
         title: movie.title,
         overview: movie.overview,
         release_date: movie.release_date,
-        poster_path: imgurl+movie.poster_path
+        poster_path: imgurl+movie.poster_path,
+        vote_average: movie.vote_average
     }));
 }
 
@@ -46,7 +47,8 @@ function simplifyUpcomingMovies(data: UpcomingMovieResponse): SimplifiedMovie[] 
         title: movie.title,
         overview: movie.overview,
         release_date: movie.release_date,
-        poster_path: imgurl+movie.poster_path
+        poster_path: imgurl+movie.poster_path,
+        vote_average: movie.vote_average,
     }));
 }
 

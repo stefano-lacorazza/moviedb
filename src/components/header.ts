@@ -25,7 +25,7 @@ class Header {
         const brandLink = document.createElement('a');
         brandLink.href = '#';
         brandLink.className = 'navbar-brand d-flex align-items-center';
-        brandLink.innerHTML = `<strong>${this.title}</strong>`;
+        brandLink.innerHTML = `<img src="/images/logo.png" style="height: 60px; margin-right: 10px;"><strong>${this.title}</strong>`;
 
         const button = document.createElement('button');
         button.className = 'navbar-toggler';

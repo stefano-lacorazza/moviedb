@@ -238,6 +238,7 @@ function appendMoviesToContainer(movies: SimplifiedMovie[]): void {
             movie.poster_path,
             movie.overview,
             movie.release_date,
+            movie.vote_average,
             favoriteMovie
         );
 
@@ -280,7 +281,7 @@ function favoriteMovie(movie: SimplifiedMovie): void {
     } else {
         // If the movie is not in the array, add it
         favoriteMovies.push(movie);
-        const moviePreview = new MoviePreview(movie.id, movie.title, movie.poster_path, movie.overview, movie.release_date, favoriteMovie);
+        const moviePreview = new MoviePreview(movie.id, movie.title, movie.poster_path, movie.overview, movie.release_date,movie.vote_average, favoriteMovie);
         favourites.appendMovie(moviePreview.render());
     }
 
@@ -314,7 +315,7 @@ function addAllMoviesFromLocalStorageToFavorites(): void {
 // Iterate over the favoriteMovies array
     favoriteMovies.forEach((movie: SimplifiedMovie) => {
     // Create a new MoviePreview instance for each movie
-    const moviePreview = new MoviePreview(movie.id, movie.title, movie.poster_path, movie.overview, movie.release_date, favoriteMovie);
+    const moviePreview = new MoviePreview(movie.id, movie.title, movie.poster_path, movie.overview, movie.release_date, movie.vote_average, favoriteMovie);
     // Append the moviePreview to the favorites list
     favourites.appendMovie(moviePreview.render());
 });
