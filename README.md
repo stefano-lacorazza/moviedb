@@ -1,5 +1,4 @@
-# Typescript
-
+# Franflix movie app
 ## 🏃‍♂️ Simple start
 
 1. **`npm run setup`** at the root
@@ -13,12 +12,3 @@ OR
 3. **`npm run dev`** at the root
 4. open **`http://localhost:8800/`**
 
-## 💡 PS
-
-The project has a [Git Hooks](https://www.atlassian.com/git/tutorials/git-hooks), [Prettier](https://prettier.io/) and [Eslint](https://eslint.org/) set up, to validate your JS code.
-
-## 💡 PPS
-
-Please, make sure there are no linter errors in your homework!
-
-## 🤞 Good luck
